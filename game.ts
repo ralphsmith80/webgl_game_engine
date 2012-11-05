@@ -33,9 +33,8 @@ var horizAspect = 480.0/640.0;
     initBuffers();
     initTextures();
 
-    //drawScene();
-
-    setInterval(drawScene, 15);
+    window.onload = drawScene;
+    //setInterval(drawScene, 15); //60 fps = (1/60)*1000 = 16.66ms
 })();
 
 function initWebGL(canvas) {
@@ -68,37 +67,7 @@ function initBuffers() {
         -1.0, -1.0,  1.0,
          1.0, -1.0,  1.0,
          1.0,  1.0,  1.0,
-        -1.0,  1.0,  1.0,
-        
-        // Back face
-        -1.0, -1.0, -1.0,
-        -1.0,  1.0, -1.0,
-         1.0,  1.0, -1.0,
-         1.0, -1.0, -1.0,
-        
-        // Top face
-        -1.0,  1.0, -1.0,
-        -1.0,  1.0,  1.0,
-         1.0,  1.0,  1.0,
-         1.0,  1.0, -1.0,
-        
-        // Bottom face
-        -1.0, -1.0, -1.0,
-         1.0, -1.0, -1.0,
-         1.0, -1.0,  1.0,
-        -1.0, -1.0,  1.0,
-        
-        // Right face
-         1.0, -1.0, -1.0,
-         1.0,  1.0, -1.0,
-         1.0,  1.0,  1.0,
-         1.0, -1.0,  1.0,
-    
-        // Left face
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0,  1.0,
-        -1.0,  1.0,  1.0,
-        -1.0,  1.0, -1.0
+        -1.0,  1.0,  1.0
     ];
    
     // Now pass the list of vertices into WebGL to build the shape. We
@@ -115,31 +84,6 @@ function initBuffers() {
         0.0,  0.0,
         1.0,  0.0,
         1.0,  1.0,
-        0.0,  1.0,
-        // Back
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
-        0.0,  1.0,
-        // Top
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
-        0.0,  1.0,
-        // Bottom
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
-        0.0,  1.0,
-        // Right
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
-        0.0,  1.0,
-        // Left
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
         0.0,  1.0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
@@ -153,12 +97,7 @@ function initBuffers() {
     // indices into the vertex array to specify each triangle's
     // position.
     var cubeVertexIndices = [
-        0,  1,  2,      0,  2,  3,    // front
-        4,  5,  6,      4,  6,  7,    // back
-        8,  9,  10,     8,  10, 11,   // top
-        12, 13, 14,     12, 14, 15,   // bottom
-        16, 17, 18,     16, 18, 19,   // right
-        20, 21, 22,     20, 22, 23    // left
+        0,  1,  2,      0,  2,  3    // front
     ]
   
     // Now send the element array to GL
@@ -189,8 +128,10 @@ function handleTextureLoaded(image, texture) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-//  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-//  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.generateMipmap(gl.TEXTURE_2D);
     gl.bindTexture(gl.TEXTURE_2D, null);
 }
@@ -234,17 +175,17 @@ function drawScene() {
     // Draw the cube.
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
     setMatrixUniforms();
-    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
   
     // Restore the original matrix
     mvPopMatrix();
 
-    var currentTime = (new Date).getTime();
-    if (lastCubeUpdateTime) {
-        var delta = currentTime - lastCubeUpdateTime;
-        cubeRotation += (30 * delta) / 1000.0;
-    }
-    lastCubeUpdateTime = currentTime;
+    //var currentTime = (new Date).getTime();
+    //if (lastCubeUpdateTime) {
+    //    var delta = currentTime - lastCubeUpdateTime;
+    //    cubeRotation += (30 * delta) / 1000.0;
+    //}
+    //lastCubeUpdateTime = currentTime;
 }
 
 function initShaders() {

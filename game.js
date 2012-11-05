@@ -23,7 +23,7 @@ var horizAspect = 480 / 640;
     initShaders();
     initBuffers();
     initTextures();
-    setInterval(drawScene, 15);
+    window.onload = drawScene;
 })();
 function initWebGL(canvas) {
     var gl;
@@ -52,112 +52,12 @@ function initBuffers() {
         1, 
         -1, 
         1, 
-        1, 
-        -1, 
-        -1, 
-        -1, 
-        -1, 
-        1, 
-        -1, 
-        1, 
-        1, 
-        -1, 
-        1, 
-        -1, 
-        -1, 
-        -1, 
-        1, 
-        -1, 
-        -1, 
-        1, 
-        1, 
-        1, 
-        1, 
-        1, 
-        1, 
-        1, 
-        -1, 
-        -1, 
-        -1, 
-        -1, 
-        1, 
-        -1, 
-        -1, 
-        1, 
-        -1, 
-        1, 
-        -1, 
-        -1, 
-        1, 
-        1, 
-        -1, 
-        -1, 
-        1, 
-        1, 
-        -1, 
-        1, 
-        1, 
-        1, 
-        1, 
-        -1, 
-        1, 
-        -1, 
-        -1, 
-        -1, 
-        -1, 
-        -1, 
-        1, 
-        -1, 
-        1, 
-        1, 
-        -1, 
-        1, 
-        -1
+        1
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     cubeVerticesTextureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
     var textureCoordinates = [
-        0, 
-        0, 
-        1, 
-        0, 
-        1, 
-        1, 
-        0, 
-        1, 
-        0, 
-        0, 
-        1, 
-        0, 
-        1, 
-        1, 
-        0, 
-        1, 
-        0, 
-        0, 
-        1, 
-        0, 
-        1, 
-        1, 
-        0, 
-        1, 
-        0, 
-        0, 
-        1, 
-        0, 
-        1, 
-        1, 
-        0, 
-        1, 
-        0, 
-        0, 
-        1, 
-        0, 
-        1, 
-        1, 
-        0, 
-        1, 
         0, 
         0, 
         1, 
@@ -176,37 +76,7 @@ function initBuffers() {
         2, 
         0, 
         2, 
-        3, 
-        4, 
-        5, 
-        6, 
-        4, 
-        6, 
-        7, 
-        8, 
-        9, 
-        10, 
-        8, 
-        10, 
-        11, 
-        12, 
-        13, 
-        14, 
-        12, 
-        14, 
-        15, 
-        16, 
-        17, 
-        18, 
-        16, 
-        18, 
-        19, 
-        20, 
-        21, 
-        22, 
-        20, 
-        22, 
-        23
+        3
     ];
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 }
@@ -251,14 +121,8 @@ function drawScene() {
     gl.uniform1i(gl.getUniformLocation(shaderProgram, "uSampler"), 0);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
     setMatrixUniforms();
-    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
     mvPopMatrix();
-    var currentTime = (new Date()).getTime();
-    if(lastCubeUpdateTime) {
-        var delta = currentTime - lastCubeUpdateTime;
-        cubeRotation += (30 * delta) / 1000;
-    }
-    lastCubeUpdateTime = currentTime;
 }
 function initShaders() {
     var fragmentShader = getShader(gl, 'fragment-shader');
