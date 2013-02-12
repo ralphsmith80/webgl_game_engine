@@ -1,9 +1,14 @@
+/// <reference path="lib/require.d.ts" />
+
+// I'm use models i.e. import statment so compile with 
+// `tsc --module amd game.ts`
+//import image = module('engine/image');
+
 var canvas;
 var gl;
 
 var cubeVerticesBuffer;
 var cubeVerticesTextureCoordBuffer;
-var cubeVerticesIndexBuffer;
 var cubeVerticesIndexBuffer;
 var cubeRotation = 0.0;
 var lastCubeUpdateTime = 0;
@@ -20,8 +25,7 @@ var perspectiveMatrix;
 
 var horizAspect = 480.0/640.0;
 
-
-(function start() {
+require([], function start() {
     var canvas = document.getElementById('game-canvas');
 
     // If we don't have a GL context, give up now
@@ -30,12 +34,16 @@ var horizAspect = 480.0/640.0;
         return;
     }
     initShaders();
+    //var i = new image.Texture(gl);
+    //i.initBuffers();
+    //i.initTextures();
     initBuffers();
     initTextures();
 
-    window.onload = drawScene;
-    //setInterval(drawScene, 15); //60 fps = (1/60)*1000 = 16.66ms
-})();
+    //drawScene();
+    //window.onload = drawScene;
+    setInterval(drawScene, 15); //60 fps = (1/60)*1000 = 16.66ms
+});
 
 function initWebGL(canvas) {
     var gl;
@@ -64,10 +72,10 @@ function initBuffers() {
     // Now create an array of vertices for the cube.
     var vertices = [
         // Front face
-        -1.0, -1.0,  1.0,
-         1.0, -1.0,  1.0,
-         1.0,  1.0,  1.0,
-        -1.0,  1.0,  1.0
+        -1.0, -1.0,  1.0,   // bottom left
+         1.0, -1.0,  1.0,   // bottom right
+        -1.0,  1.0,  1.0,   // top left
+         1.0,  1.0,  1.0    // top right
     ];
    
     // Now pass the list of vertices into WebGL to build the shape. We
@@ -81,10 +89,10 @@ function initBuffers() {
 
     var textureCoordinates = [
         // Front
-        0.0,  0.0,
-        1.0,  0.0,
-        1.0,  1.0,
-        0.0,  1.0
+        0.0,  1.0,  // top left
+        1.0,  1.0,  // top right
+        0.0,  0.0,  // bottom left
+        1.0,  0.0   // bottom right
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
 
@@ -97,7 +105,7 @@ function initBuffers() {
     // indices into the vertex array to specify each triangle's
     // position.
     var cubeVertexIndices = [
-        0,  1,  2,      0,  2,  3    // front
+        0,  1,  2,      1,  2,  3    // front
     ]
   
     // Now send the element array to GL
@@ -108,7 +116,7 @@ function initTextures() {
     cubeTexture = gl.createTexture();
     cubeImage = new Image();
     cubeImage.onload = function() { handleTextureLoaded(cubeImage, cubeTexture); }
-    cubeImage.src = "cubetexture.png";
+    cubeImage.src = "img/cubetexture.png";
     //cubeImage.src = "GameAtlas.png";
     //cubeImage.src = "galaxies_alpha.png";
     //cubeImage.src = "http://localhost:8000/galaxies_alpha.png";

@@ -3,7 +3,6 @@ var gl;
 var cubeVerticesBuffer;
 var cubeVerticesTextureCoordBuffer;
 var cubeVerticesIndexBuffer;
-var cubeVerticesIndexBuffer;
 var cubeRotation = 0;
 var lastCubeUpdateTime = 0;
 var cubeImage;
@@ -14,7 +13,7 @@ var vertexPositionAttribute;
 var textureCoordAttribute;
 var perspectiveMatrix;
 var horizAspect = 480 / 640;
-(function start() {
+require([], function start() {
     var canvas = document.getElementById('game-canvas');
     if(!(gl = initWebGL(canvas))) {
         alert('Unable to initialize WebGL. Your browser may not support it.');
@@ -23,8 +22,8 @@ var horizAspect = 480 / 640;
     initShaders();
     initBuffers();
     initTextures();
-    window.onload = drawScene;
-})();
+    setInterval(drawScene, 15);
+});
 function initWebGL(canvas) {
     var gl;
     gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -47,10 +46,10 @@ function initBuffers() {
         1, 
         -1, 
         1, 
-        1, 
-        1, 
-        1, 
         -1, 
+        1, 
+        1, 
+        1, 
         1, 
         1
     ];
@@ -59,13 +58,13 @@ function initBuffers() {
     gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesTextureCoordBuffer);
     var textureCoordinates = [
         0, 
-        0, 
-        1, 
-        0, 
         1, 
         1, 
+        1, 
         0, 
-        1
+        0, 
+        1, 
+        0
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
     cubeVerticesIndexBuffer = gl.createBuffer();
@@ -74,7 +73,7 @@ function initBuffers() {
         0, 
         1, 
         2, 
-        0, 
+        1, 
         2, 
         3
     ];
@@ -86,7 +85,7 @@ function initTextures() {
     cubeImage.onload = function () {
         handleTextureLoaded(cubeImage, cubeTexture);
     };
-    cubeImage.src = "cubetexture.png";
+    cubeImage.src = "img/cubetexture.png";
 }
 function handleTextureLoaded(image, texture) {
     console.log("handleTextureLoaded, image = " + image);
