@@ -134,10 +134,12 @@ function handleTextureLoaded(image, texture) {
     console.log("handleTextureLoaded, image = " + image);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
-//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+//    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+//    gl.texImage2D(gl.TEXTURE_2D, 0, gl.ALPHA, gl.ALPHA, gl.UNSIGNED_BYTE, image);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+//    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 //    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 //    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.generateMipmap(gl.TEXTURE_2D);
@@ -152,7 +154,7 @@ function drawScene() {
     // scene. Our field of view is 45 degrees, with a width/height
     // ratio of 640:480, and we only want to see objects between 0.1 units
     // and 100 units away from the camera.   
-    perspectiveMatrix = makePerspective(45, 640.0/480.0, 0.1, 100.0);
+    perspectiveMatrix = makePerspective(45, horizAspect, 0.1, 100.0);
    
     // Set the drawing position to the "identity" point, which is
     // the center of the scene.
@@ -165,6 +167,18 @@ function drawScene() {
     // Save the current matrix, then rotate before we draw.
     mvPushMatrix();
     mvRotate(cubeRotation, [1, 0, 1]);
+
+    /////// - blending
+    gl.enable(gl.BLEND);
+    //var blending = document.getElementById("blending").checked;
+    //if (blending) {
+    //    console.log('blending');
+    //}
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    //gl.enableClientState(gl.COLOR_ARRAY);
+    //gl.enableClientState(gl.VERTEX_ARRAY);
+    //gl.enableClientState(gl.TEXTURE_COORD_ARRAY);
+    ////////
    
     // Draw the square by binding the array buffer to the cube's vertices
     // array, setting attributes, and pushing it to GL.
